@@ -2,19 +2,16 @@
 #define PRICE_H
 
 #include <iostream>
+#include <fstream>
 
-class Price {
-public:
+struct Price {
     int grn;
-    short int kop;
-
-    Price();
-    Price(int grn, short int kop);
-
-    Price operator+(const Price& other);
-    Price operator*(int num);
-    void roundTo10Kop();
-    void print() const;
+    int short kop;
 };
 
-#endif // PRICE_H
+void addPrice(const Price& price1, const Price& price2, Price& result);
+void mulPrice(const Price& price, int quantity, Price& result);
+void roundTo10Kop(Price& price);
+void printPrice(const Price& price);
+
+#endif

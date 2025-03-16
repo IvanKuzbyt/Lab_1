@@ -1,35 +1,33 @@
 #include "Price.h"
-#include <cmath>
 
 using namespace std;
 
-Price::Price() : grn(0), kop(0) {}
-
-Price::Price(int grn, short int kop) : grn(grn), kop(kop) {}
-
-Price Price::operator+(const Price& other) {
-    int fullKop = kop + other.kop;
-    int carry = fullKop / 100;
-    return Price(grn + other.grn + carry, fullKop % 100);
+void addPrice(const Price& price1, const Price& price2, Price& result) {
+    int totalKop = (price1.grn * 100 + price1.kop) + (price2.grn * 100 + price2.kop);
+    result.grn = totalKop / 100;
+    result.kop = totalKop % 100;
 }
 
-Price Price::operator*(int num) {
-    int fullKop = grn * 100 + kop;
-    int resultKop = round(fullKop * num);
-    return Price(resultKop / 100, resultKop % 100);
+void mulPrice(const Price& price, int quantity, Price& result) {
+    int totalKop = (price.grn * 100 + price.kop) * quantity;
+    result.grn = totalKop / 100;
+    result.kop = totalKop % 100;
 }
 
-void Price::roundTo10Kop() {
-    if (kop > 95) {
-        grn++;
-        kop = 0;
-    } else if (kop < 5) {
-        kop = 0;
+void roundTo10Kop(Price& price) {
+    int remainder = price.kop % 10;
+    if (remainder < 5) {
+        price.kop -= remainder;
+    } else {
+        price.kop += (10 - remainder);
     }
-    if (kop % 10 < 5) kop -= kop % 10;
-    else kop += 10 - (kop % 10);
+
+    if (price.kop >= 100) {
+        price.grn += price.kop / 100;
+        price.kop %= 100;
+    }
 }
 
-void Price::print() const {
-    cout << grn << " грн " << kop << " коп";
+void printPrice(const Price& price) {
+    cout << price.grn << " грн " << price.kop << " коп";
 }
